@@ -3,31 +3,42 @@
         <div v-if="viewMode === 'table'" class="space-y-4">
             <!-- Today Table -->
             <div>
-                <h3 class="text-base font-semibold mb-2 flex items-center gap-2 cursor-pointer" @click="showToday = !showToday">
-                    <span>{{ showToday ? '▼' : '▶' }}</span>
+                <h3
+                    class="text-base sm:text-lg font-semibold mb-2 flex items-center gap-2 cursor-pointer py-2 -mx-2 px-2 active:bg-gray-100 rounded transition-colors"
+                    @click="showToday = !showToday"
+                >
+                    <span class="text-lg">{{ showToday ? '▼' : '▶' }}</span>
                     <span>Today</span>
                 </h3>
-                <div v-if="showToday" class="overflow-x-auto">
+                <div v-if="showToday" class="overflow-x-auto -mx-3 px-3 sm:mx-0 sm:px-0">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Title</th>
-                                <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Due</th>
-                                <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Recurrence</th>
-                                <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Life Area</th>
-                                <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Completed</th>
-                                <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Actions</th>
+                                <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap">Title</th>
+                                <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap">Due</th>
+                                <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap hidden sm:table-cell">Recurrence</th>
+                                <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap hidden md:table-cell">Life Area</th>
+                                <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap hidden lg:table-cell">Completed</th>
+                                <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-100">
                             <tr v-for="t in today" :key="t.id">
-                                <td class="px-3 py-1 text-sm">{{ t.text }}</td>
-                                <td class="px-3 py-1 text-sm">{{ parseNextDue(t) ? parseNextDue(t).format('YYYY-MM-DD') : '-' }}</td>
-                                <td class="px-3 py-1 text-sm">{{ getRecurrence(t) }}</td>
-                                <td class="px-3 py-1 text-sm">{{ getLifeArea(t.tags) }}</td>
-                                <td class="px-3 py-1 text-sm">{{ t.completed ? 'Yes' : 'No' }}</td>
-                                <td class="px-3 py-1 text-sm">
-                                    <button v-if="!t.completed" @click="markDone(t.id)" class="text-sm text-indigo-600">Mark</button>
+                                <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm break-words max-w-xs">{{ t.text }}</td>
+                                <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm whitespace-nowrap">
+                                    {{ parseNextDue(t) ? parseNextDue(t).format('YYYY-MM-DD') : '-' }}
+                                </td>
+                                <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm whitespace-nowrap hidden sm:table-cell">{{ getRecurrence(t) }}</td>
+                                <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm whitespace-nowrap hidden md:table-cell">{{ getLifeArea(t.tags) }}</td>
+                                <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm whitespace-nowrap hidden lg:table-cell">{{ t.completed ? 'Yes' : 'No' }}</td>
+                                <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm whitespace-nowrap">
+                                    <button
+                                        v-if="!t.completed"
+                                        @click="markDone(t.id)"
+                                        class="text-xs sm:text-sm text-indigo-600 px-2 py-1 active:bg-indigo-50 rounded"
+                                    >
+                                        Mark
+                                    </button>
                                 </td>
                             </tr>
                             <tr v-if="!today.length">
@@ -42,35 +53,54 @@
             <div>
                 <div class="space-y-3">
                     <div>
-                        <div class="text-sm text-gray-600 mb-2 flex items-center gap-2 cursor-pointer" @click="show7Days = !show7Days">
-                            <span>{{ show7Days ? '▼' : '▶' }}</span>
+                        <div
+                            class="text-sm sm:text-base text-gray-600 mb-2 flex items-center gap-2 cursor-pointer py-2 -mx-2 px-2 active:bg-gray-100 rounded transition-colors"
+                            @click="show7Days = !show7Days"
+                        >
+                            <span class="text-base">{{ show7Days ? '▼' : '▶' }}</span>
                             <span>Next 7 days</span>
                         </div>
-                        <div v-if="show7Days" class="overflow-x-auto">
+                        <div v-if="show7Days" class="overflow-x-auto -mx-3 px-3 sm:mx-0 sm:px-0">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Title</th>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Due</th>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Recurrence</th>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Life Area</th>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Completed</th>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Actions</th>
+                                        <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap">Title</th>
+                                        <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap">Due</th>
+                                        <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap hidden sm:table-cell">
+                                            Recurrence
+                                        </th>
+                                        <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap hidden md:table-cell">
+                                            Life Area
+                                        </th>
+                                        <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap hidden lg:table-cell">
+                                            Completed
+                                        </th>
+                                        <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-100">
                                     <tr v-for="t in upcoming7" :key="t.id">
-                                        <td class="px-3 py-1 text-sm">{{ t.text }}</td>
-                                        <td class="px-3 py-1 text-sm">{{ parseNextDue(t) ? parseNextDue(t).format('YYYY-MM-DD') : '-' }}</td>
-                                        <td class="px-3 py-1 text-sm">{{ getRecurrence(t) }}</td>
-                                        <td class="px-3 py-1 text-sm">{{ getLifeArea(t.tags) }}</td>
-                                        <td class="px-3 py-1 text-sm">{{ t.completed ? 'Yes' : 'No' }}</td>
-                                        <td class="px-3 py-1 text-sm">
-                                            <button v-if="!t.completed" @click="markDone(t.id)" class="text-sm text-indigo-600">Mark</button>
+                                        <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm break-words max-w-xs">{{ t.text }}</td>
+                                        <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm whitespace-nowrap">
+                                            {{ parseNextDue(t) ? parseNextDue(t).format('YYYY-MM-DD') : '-' }}
+                                        </td>
+                                        <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm whitespace-nowrap hidden sm:table-cell">{{ getRecurrence(t) }}</td>
+                                        <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm whitespace-nowrap hidden md:table-cell">{{ getLifeArea(t.tags) }}</td>
+                                        <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm whitespace-nowrap hidden lg:table-cell">
+                                            {{ t.completed ? 'Yes' : 'No' }}
+                                        </td>
+                                        <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm whitespace-nowrap">
+                                            <button
+                                                v-if="!t.completed"
+                                                @click="markDone(t.id)"
+                                                class="text-xs sm:text-sm text-indigo-600 px-2 py-1 active:bg-indigo-50 rounded"
+                                            >
+                                                Mark
+                                            </button>
                                         </td>
                                     </tr>
                                     <tr v-if="!upcoming7.length">
-                                        <td class="px-3 py-1 text-sm text-gray-500" colspan="6">No items.</td>
+                                        <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm text-gray-500" colspan="6">No items.</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -78,35 +108,54 @@
                     </div>
 
                     <div>
-                        <div class="text-sm text-gray-600 mb-2 flex items-center gap-2 cursor-pointer" @click="show30Days = !show30Days">
-                            <span>{{ show30Days ? '▼' : '▶' }}</span>
+                        <div
+                            class="text-sm sm:text-base text-gray-600 mb-2 flex items-center gap-2 cursor-pointer py-2 -mx-2 px-2 active:bg-gray-100 rounded transition-colors"
+                            @click="show30Days = !show30Days"
+                        >
+                            <span class="text-base">{{ show30Days ? '▼' : '▶' }}</span>
                             <span>Next 30 days</span>
                         </div>
-                        <div v-if="show30Days" class="overflow-x-auto">
+                        <div v-if="show30Days" class="overflow-x-auto -mx-3 px-3 sm:mx-0 sm:px-0">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Title</th>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Due</th>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Recurrence</th>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Life Area</th>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Completed</th>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Actions</th>
+                                        <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap">Title</th>
+                                        <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap">Due</th>
+                                        <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap hidden sm:table-cell">
+                                            Recurrence
+                                        </th>
+                                        <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap hidden md:table-cell">
+                                            Life Area
+                                        </th>
+                                        <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap hidden lg:table-cell">
+                                            Completed
+                                        </th>
+                                        <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-100">
                                     <tr v-for="t in upcoming30" :key="t.id">
-                                        <td class="px-4 py-2 text-sm">{{ t.text }}</td>
-                                        <td class="px-4 py-2 text-sm">{{ parseNextDue(t) ? parseNextDue(t).format('YYYY-MM-DD') : '-' }}</td>
-                                        <td class="px-4 py-2 text-sm">{{ getRecurrence(t) }}</td>
-                                        <td class="px-4 py-2 text-sm">{{ getLifeArea(t.tags) }}</td>
-                                        <td class="px-4 py-2 text-sm">{{ t.completed ? 'Yes' : 'No' }}</td>
-                                        <td class="px-4 py-2 text-sm">
-                                            <button v-if="!t.completed" @click="markDone(t.id)" class="text-sm text-indigo-600">Mark</button>
+                                        <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm break-words max-w-xs">{{ t.text }}</td>
+                                        <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm whitespace-nowrap">
+                                            {{ parseNextDue(t) ? parseNextDue(t).format('YYYY-MM-DD') : '-' }}
+                                        </td>
+                                        <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm whitespace-nowrap hidden sm:table-cell">{{ getRecurrence(t) }}</td>
+                                        <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm whitespace-nowrap hidden md:table-cell">{{ getLifeArea(t.tags) }}</td>
+                                        <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm whitespace-nowrap hidden lg:table-cell">
+                                            {{ t.completed ? 'Yes' : 'No' }}
+                                        </td>
+                                        <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm whitespace-nowrap">
+                                            <button
+                                                v-if="!t.completed"
+                                                @click="markDone(t.id)"
+                                                class="text-xs sm:text-sm text-indigo-600 px-2 py-1 active:bg-indigo-50 rounded"
+                                            >
+                                                Mark
+                                            </button>
                                         </td>
                                     </tr>
                                     <tr v-if="!upcoming30.length">
-                                        <td class="px-3 py-1 text-sm text-gray-500" colspan="6">No items.</td>
+                                        <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm text-gray-500" colspan="6">No items.</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -114,35 +163,54 @@
                     </div>
 
                     <div>
-                        <div class="text-sm text-gray-600 mb-2 flex items-center gap-2 cursor-pointer" @click="showBeyond30 = !showBeyond30">
-                            <span>{{ showBeyond30 ? '▼' : '▶' }}</span>
+                        <div
+                            class="text-sm sm:text-base text-gray-600 mb-2 flex items-center gap-2 cursor-pointer py-2 -mx-2 px-2 active:bg-gray-100 rounded transition-colors"
+                            @click="showBeyond30 = !showBeyond30"
+                        >
+                            <span class="text-base">{{ showBeyond30 ? '▼' : '▶' }}</span>
                             <span>Beyond 30 days</span>
                         </div>
-                        <div v-if="showBeyond30" class="overflow-x-auto">
+                        <div v-if="showBeyond30" class="overflow-x-auto -mx-3 px-3 sm:mx-0 sm:px-0">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Title</th>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Due</th>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Recurrence</th>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Life Area</th>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Completed</th>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Actions</th>
+                                        <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap">Title</th>
+                                        <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap">Due</th>
+                                        <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap hidden sm:table-cell">
+                                            Recurrence
+                                        </th>
+                                        <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap hidden md:table-cell">
+                                            Life Area
+                                        </th>
+                                        <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap hidden lg:table-cell">
+                                            Completed
+                                        </th>
+                                        <th class="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500 whitespace-nowrap">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-100">
                                     <tr v-for="t in upcomingBeyond" :key="t.id">
-                                        <td class="px-4 py-2 text-sm">{{ t.text }}</td>
-                                        <td class="px-4 py-2 text-sm">{{ parseNextDue(t) ? parseNextDue(t).format('YYYY-MM-DD') : '-' }}</td>
-                                        <td class="px-4 py-2 text-sm">{{ getRecurrence(t) }}</td>
-                                        <td class="px-4 py-2 text-sm">{{ getLifeArea(t.tags) }}</td>
-                                        <td class="px-4 py-2 text-sm">{{ t.completed ? 'Yes' : 'No' }}</td>
-                                        <td class="px-4 py-2 text-sm">
-                                            <button v-if="!t.completed" @click="markDone(t.id)" class="text-sm text-indigo-600">Mark</button>
+                                        <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm break-words max-w-xs">{{ t.text }}</td>
+                                        <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm whitespace-nowrap">
+                                            {{ parseNextDue(t) ? parseNextDue(t).format('YYYY-MM-DD') : '-' }}
+                                        </td>
+                                        <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm whitespace-nowrap hidden sm:table-cell">{{ getRecurrence(t) }}</td>
+                                        <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm whitespace-nowrap hidden md:table-cell">{{ getLifeArea(t.tags) }}</td>
+                                        <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm whitespace-nowrap hidden lg:table-cell">
+                                            {{ t.completed ? 'Yes' : 'No' }}
+                                        </td>
+                                        <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm whitespace-nowrap">
+                                            <button
+                                                v-if="!t.completed"
+                                                @click="markDone(t.id)"
+                                                class="text-xs sm:text-sm text-indigo-600 px-2 py-1 active:bg-indigo-50 rounded"
+                                            >
+                                                Mark
+                                            </button>
                                         </td>
                                     </tr>
                                     <tr v-if="!upcomingBeyond.length">
-                                        <td class="px-3 py-1 text-sm text-gray-500" colspan="6">No items.</td>
+                                        <td class="px-2 sm:px-3 py-2 text-xs sm:text-sm text-gray-500" colspan="6">No items.</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -154,8 +222,11 @@
         <div v-else>
             <!-- Today -->
             <section v-if="!showMissed" class="mb-2">
-                <h3 class="text-base font-semibold mb-2 flex items-center gap-2 cursor-pointer" @click="showToday = !showToday">
-                    <span>{{ showToday ? '▼' : '▶' }}</span>
+                <h3
+                    class="text-base sm:text-lg font-semibold mb-2 flex items-center gap-2 cursor-pointer py-2 -mx-2 px-2 active:bg-gray-100 rounded transition-colors"
+                    @click="showToday = !showToday"
+                >
+                    <span class="text-lg">{{ showToday ? '▼' : '▶' }}</span>
                     <span>Today</span>
                 </h3>
                 <div v-if="showToday" class="space-y-2">
@@ -181,8 +252,11 @@
             <section v-if="!showMissed" class="my-4">
                 <div class="space-y-3">
                     <div v-if="upcoming7.length">
-                        <div class="text-sm text-gray-600 mb-2 flex items-center gap-2 cursor-pointer" @click="show7Days = !show7Days">
-                            <span>{{ show7Days ? '▼' : '▶' }}</span>
+                        <div
+                            class="text-sm sm:text-base text-gray-600 mb-2 flex items-center gap-2 cursor-pointer py-2 -mx-2 px-2 active:bg-gray-100 rounded transition-colors"
+                            @click="show7Days = !show7Days"
+                        >
+                            <span class="text-base">{{ show7Days ? '▼' : '▶' }}</span>
                             <span>Next 7 days</span>
                         </div>
                         <div v-if="show7Days" class="space-y-2">
@@ -203,8 +277,11 @@
                         </div>
                     </div>
                     <div v-if="upcoming30.length">
-                        <div class="text-sm text-gray-600 mb-2 flex items-center gap-2 cursor-pointer" @click="show30Days = !show30Days">
-                            <span>{{ show30Days ? '▼' : '▶' }}</span>
+                        <div
+                            class="text-sm sm:text-base text-gray-600 mb-2 flex items-center gap-2 cursor-pointer py-2 -mx-2 px-2 active:bg-gray-100 rounded transition-colors"
+                            @click="show30Days = !show30Days"
+                        >
+                            <span class="text-base">{{ show30Days ? '▼' : '▶' }}</span>
                             <span>Next 30 days</span>
                         </div>
                         <div v-if="show30Days" class="space-y-2">
@@ -225,8 +302,11 @@
                         </div>
                     </div>
                     <div v-if="upcomingBeyond.length">
-                        <div class="text-sm text-gray-600 mb-2 flex items-center gap-2 cursor-pointer" @click="showBeyond30 = !showBeyond30">
-                            <span>{{ showBeyond30 ? '▼' : '▶' }}</span>
+                        <div
+                            class="text-sm sm:text-base text-gray-600 mb-2 flex items-center gap-2 cursor-pointer py-2 -mx-2 px-2 active:bg-gray-100 rounded transition-colors"
+                            @click="showBeyond30 = !showBeyond30"
+                        >
+                            <span class="text-base">{{ showBeyond30 ? '▼' : '▶' }}</span>
                             <span>Beyond 30 days</span>
                         </div>
                         <div v-if="showBeyond30" class="space-y-2">
@@ -252,19 +332,24 @@
     </div>
 
     <!-- Notes Modal -->
-    <div v-if="notesTaskId" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" @click.self="notesTaskId = null">
-        <div class="bg-white rounded-lg shadow-xl p-6 max-w-2xl w-full mx-4" @click.stop>
+    <div v-if="notesTaskId" class="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center z-50 p-0 sm:p-4" @click.self="notesTaskId = null">
+        <div class="bg-white rounded-t-2xl sm:rounded-lg shadow-xl p-4 sm:p-6 max-w-2xl w-full max-h-[90vh] sm:max-h-[80vh] flex flex-col" @click.stop>
             <div class="flex justify-between items-start mb-4">
-                <h2 class="text-xl font-bold">{{ notesTask?.text || 'Task Notes' }}</h2>
-                <button @click="notesTaskId = null" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+                <h2 class="text-lg sm:text-xl font-bold pr-4 break-words">{{ notesTask?.text || 'Task Notes' }}</h2>
+                <button
+                    @click="notesTaskId = null"
+                    class="text-gray-400 hover:text-gray-600 active:text-gray-800 text-3xl sm:text-2xl leading-none flex-shrink-0 w-10 h-10 flex items-center justify-center"
+                >
+                    &times;
+                </button>
             </div>
             <textarea
                 v-model="notesContent"
                 @blur="saveNotes"
-                class="w-full h-64 p-3 border rounded resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                class="w-full flex-1 min-h-[200px] sm:h-64 p-3 border rounded resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 text-base"
                 placeholder="Add notes for this task..."
             ></textarea>
-            <div class="mt-4 text-sm text-gray-500">Notes are saved automatically when you click outside the text area.</div>
+            <div class="mt-4 text-xs sm:text-sm text-gray-500">Notes are saved automatically when you click outside the text area.</div>
         </div>
     </div>
 </template>

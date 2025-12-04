@@ -1,12 +1,12 @@
 <template>
-    <div class="max-w-4xl mx-auto p-6">
+    <div class="max-w-4xl mx-auto p-3 sm:p-6">
         <header class="mb-4">
-            <div class="flex justify-between items-center mb-8">
-                <h1 class="text-2xl font-bold">Habitica Dashboard</h1>
-                <div class="flex items-center gap-3">
-                    <input v-model="localUser" placeholder="HABITICA_USER_ID" class="border rounded px-2 py-1 text-sm" />
-                    <input v-model="localKey" placeholder="HABITICA_API_KEY" class="border rounded px-2 py-1 text-sm" />
-                    <button @click="saveCreds" class="bg-indigo-600 text-white px-3 py-1 rounded text-sm">Save</button>
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6 sm:mb-8">
+                <h1 class="text-xl sm:text-2xl font-bold">Habitica Dashboard</h1>
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
+                    <input v-model="localUser" placeholder="USER_ID" class="border rounded px-2 py-1.5 text-sm w-full sm:w-auto" />
+                    <input v-model="localKey" placeholder="API_KEY" class="border rounded px-2 py-1.5 text-sm w-full sm:w-auto" />
+                    <button @click="saveCreds" class="bg-indigo-600 text-white px-3 py-1.5 rounded text-sm">Save</button>
                 </div>
             </div>
             <div v-if="store.hasCreds" class="mb-2">
@@ -15,35 +15,36 @@
             <div v-else class="text-sm text-gray-600">Enter your Habitica credentials above to load data (stored locally).</div>
 
             <div v-if="store.availableTags && store.availableTags.length" class="mb-3">
-                <div class="flex items-center gap-2 flex-wrap">
-                    <div class="text-sm text-gray-600 mr-2">Filter tags:</div>
-                    <button
-                        v-for="tag in store.availableTags"
-                        :key="tag"
-                        @click="store.toggleTag(tag)"
-                        :class="[
-                            'text-sm px-2 py-1 rounded border',
-                            store.selectedTags && store.selectedTags.includes(tag) ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700',
-                        ]"
-                    >
-                        {{ tag }}
-                    </button>
-                    <button
-                        v-if="store.selectedTags && store.selectedTags.length"
-                        @click="store.clearSelectedTags()"
-                        class="ml-2 text-sm px-2 py-1 rounded border bg-gray-100"
-                    >
-                        Clear
-                    </button>
+                <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <button
+                            v-for="tag in store.availableTags"
+                            :key="tag"
+                            @click="store.toggleTag(tag)"
+                            :class="[
+                                'text-xs sm:text-sm px-2 py-1 rounded border whitespace-nowrap',
+                                store.selectedTags && store.selectedTags.includes(tag) ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700',
+                            ]"
+                        >
+                            {{ tag }}
+                        </button>
+                        <button
+                            v-if="store.selectedTags && store.selectedTags.length"
+                            @click="store.clearSelectedTags()"
+                            class="text-xs sm:text-sm px-2 py-1 rounded border bg-gray-100"
+                        >
+                            Clear
+                        </button>
+                    </div>
                 </div>
             </div>
-            <div class="flex justify-between">
+            <div class="flex flex-col sm:flex-row gap-3 sm:justify-between">
                 <div class="mb-2">
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-2 flex-wrap">
                         <button
                             @click="store.setCompletionFilter('all')"
                             :class="[
-                                'text-sm px-2 py-1 rounded border',
+                                'text-xs sm:text-sm px-3 py-1.5 rounded border',
                                 store.completionFilter === 'all' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700',
                             ]"
                         >
@@ -52,7 +53,7 @@
                         <button
                             @click="store.setCompletionFilter('not-done')"
                             :class="[
-                                'text-sm px-2 py-1 rounded border',
+                                'text-xs sm:text-sm px-3 py-1.5 rounded border',
                                 store.completionFilter === 'not-done' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700',
                             ]"
                         >
@@ -61,7 +62,7 @@
                         <button
                             @click="store.setCompletionFilter('done')"
                             :class="[
-                                'text-sm px-2 py-1 rounded border',
+                                'text-xs sm:text-sm px-3 py-1.5 rounded border',
                                 store.completionFilter === 'done' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700',
                             ]"
                         >
@@ -69,19 +70,25 @@
                         </button>
                     </div>
                 </div>
-                <div class="mb-2">
+                <div class="mb-2 hidden sm:block">
                     <div class="flex items-center gap-2">
                         <button
                             @click="viewMode = 'list'"
-                            :class="['text-sm px-2 py-1 rounded border', viewMode === 'list' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700']"
+                            :class="[
+                                'text-xs sm:text-sm px-3 py-1.5 rounded border',
+                                viewMode === 'list' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700',
+                            ]"
                         >
-                            List
+                            📱 List
                         </button>
                         <button
                             @click="viewMode = 'table'"
-                            :class="['text-sm px-2 py-1 rounded border', viewMode === 'table' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700']"
+                            :class="[
+                                'text-xs sm:text-sm px-3 py-1.5 rounded border',
+                                viewMode === 'table' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700',
+                            ]"
                         >
-                            Table
+                            📊 Table
                         </button>
                     </div>
                 </div>

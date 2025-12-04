@@ -18,4 +18,43 @@ body,
 
 body {
     background-color: var(--bg);
+    /* Improve touch scrolling on mobile */
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Better touch targets for mobile */
+@media (max-width: 640px) {
+    button {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* Prevent text selection on buttons for better mobile UX */
+    button {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    /* Smooth scrolling */
+    * {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* Improve input sizing on mobile */
+@media (max-width: 640px) {
+    input,
+    textarea {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+}
+
+/* Better modal behavior on mobile */
+@media (max-width: 640px) {
+    .modal-content {
+        max-height: 90vh;
+        overflow-y: auto;
+    }
 }

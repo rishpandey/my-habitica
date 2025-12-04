@@ -1,14 +1,14 @@
 <template>
-    <div class="bg-white shadow rounded p-4 flex items-center gap-4">
-        <div>
+    <div class="bg-white shadow rounded p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+        <div class="flex-shrink-0">
             <div class="text-sm text-gray-500">Level</div>
             <div class="font-semibold text-lg">{{ stats.level ?? '-' }}</div>
-            <div class="w-48 bg-gray-200 h-2 rounded mt-2">
+            <div class="w-full sm:w-48 bg-gray-200 h-2 rounded mt-2">
                 <div class="h-2 rounded bg-indigo-500" :style="{ width: xpPct + '%' }"></div>
             </div>
         </div>
         <div class="flex-1">
-            <div class="grid grid-cols-4 gap-4 text-sm">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-sm">
                 <div class="text-center">
                     <div class="text-xs text-gray-500">HP</div>
                     <div class="font-medium">{{ stats.hp ?? '-' }}</div>
@@ -27,7 +27,7 @@
                 </div>
             </div>
         </div>
-        <div class="text-sm text-gray-500">Updated</div>
+        <div class="text-sm text-gray-500 hidden sm:block">Updated</div>
     </div>
 </template>
 
