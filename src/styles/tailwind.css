@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#app {
+    height: 100%;
+}
+
+/* Minimal calm palette */
+:root {
+    --bg: #f7f7f9;
+    --card: #ffffff;
+    --muted: #6b7280;
+    --accent: #7c3aed;
+}
+
+body {
+    background-color: var(--bg);
+}
