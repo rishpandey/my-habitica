@@ -13,4 +13,4 @@ git commit -m "Update build files"
 echo "Pushing to GitHub..."
 git push origin main
 
-echo "Deployment complete! Access your site at: https://USERNAME.github.io/my-habitica-ui/dist/"
+echo "Deployment complete! Access your site at: https://rishpandey.github.io/my-habitica/"
