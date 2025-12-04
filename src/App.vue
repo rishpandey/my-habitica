@@ -9,6 +9,11 @@
                     <button @click="saveCreds" class="bg-indigo-600 text-white px-3 py-1 rounded text-sm">Save</button>
                 </div>
             </div>
+            <div v-if="store.hasCreds" class="mb-2">
+                <HeaderStats :user="store.user" :headerStats="store.headerStats" :dueCount="store.dueTodayCount()" />
+            </div>
+            <div v-else class="text-sm text-gray-600">Enter your Habitica credentials above to load data (stored locally).</div>
+
             <div v-if="store.availableTags && store.availableTags.length" class="mb-3">
                 <div class="flex items-center gap-2 flex-wrap">
                     <div class="text-sm text-gray-600 mr-2">Filter tags:</div>
@@ -81,34 +86,9 @@
                     </div>
                 </div>
             </div>
-
-            <div v-if="store.hasCreds" class="mb-2">
-                <HeaderStats :user="store.user" :headerStats="store.headerStats" :dueCount="store.dueTodayCount()" />
-            </div>
-            <div v-else class="text-sm text-gray-600">Enter your Habitica credentials above to load data (stored locally).</div>
         </header>
 
         <main>
-            <div class="mb-3">
-                <nav class="flex gap-2">
-                    <div
-                        :class="['px-3 py-1 rounded cursor-pointer', activeTab === 'dashboard' ? 'bg-white shadow' : 'bg-gray-100']"
-                        @click="activeTab = 'dashboard'"
-                    >
-                        Dashboard
-                    </div>
-                    <div
-                        :class="['px-3 py-1 rounded cursor-pointer', activeTab === 'missed' ? 'bg-white shadow' : 'bg-gray-100']"
-                        @click="activeTab = 'missed'"
-                    >
-                        Missed
-                    </div>
-                    <div :class="['px-3 py-1 rounded cursor-pointer', activeTab === 'past' ? 'bg-white shadow' : 'bg-gray-100']" @click="activeTab = 'past'">
-                        Past
-                    </div>
-                </nav>
-            </div>
-
             <div>
                 <!-- Global spinner -->
                 <div v-if="store.loading" class="fixed inset-0 bg-black/20 flex items-center justify-center">
@@ -122,13 +102,6 @@
                     <Dashboard v-if="store.hasCreds" :store="store" :viewMode="viewMode" :show-missed="false" />
                     <div v-else class="text-sm text-gray-500">Provide credentials to view your dashboard.</div>
                 </div>
-                <div v-show="activeTab === 'missed'">
-                    <Dashboard v-if="store.hasCreds" :store="store" :viewMode="viewMode" :show-missed="true" />
-                    <div v-else class="text-sm text-gray-500">Provide credentials to view missed tasks.</div>
-                </div>
-                <div v-show="activeTab === 'past'">
-                    <Past :store="store" />
-                </div>
             </div>
         </main>
     </div>
@@ -139,10 +112,9 @@ import { ref, watch, onMounted } from 'vue';
 import { useHabiticaStore } from './stores/useHabiticaStore';
 import HeaderStats from './components/HeaderStats.vue';
 import Dashboard from './components/Dashboard.vue';
-import Past from './components/Past.vue';
 
 export default {
-    components: { HeaderStats, Dashboard, Past },
+    components: { HeaderStats, Dashboard },
     setup() {
         const store = useHabiticaStore();
         const localUser = ref(store.userId);

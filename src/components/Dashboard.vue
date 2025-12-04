@@ -3,8 +3,11 @@
         <div v-if="viewMode === 'table'" class="space-y-4">
             <!-- Today Table -->
             <div>
-                <h3 class="text-base font-semibold mb-2">Today</h3>
-                <div class="overflow-x-auto">
+                <h3 class="text-base font-semibold mb-2 flex items-center gap-2 cursor-pointer" @click="showToday = !showToday">
+                    <span>{{ showToday ? '▼' : '▶' }}</span>
+                    <span>Today</span>
+                </h3>
+                <div v-if="showToday" class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
@@ -37,11 +40,13 @@
 
             <!-- Upcoming Tables -->
             <div>
-                <h3 class="text-base font-semibold mb-2">Upcoming</h3>
                 <div class="space-y-3">
                     <div>
-                        <div class="text-sm text-gray-600 mb-2">Next 7 days</div>
-                        <div class="overflow-x-auto">
+                        <div class="text-sm text-gray-600 mb-2 flex items-center gap-2 cursor-pointer" @click="show7Days = !show7Days">
+                            <span>{{ show7Days ? '▼' : '▶' }}</span>
+                            <span>Next 7 days</span>
+                        </div>
+                        <div v-if="show7Days" class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
@@ -73,8 +78,11 @@
                     </div>
 
                     <div>
-                        <div class="text-sm text-gray-600 mb-2">Next 30 days</div>
-                        <div class="overflow-x-auto">
+                        <div class="text-sm text-gray-600 mb-2 flex items-center gap-2 cursor-pointer" @click="show30Days = !show30Days">
+                            <span>{{ show30Days ? '▼' : '▶' }}</span>
+                            <span>Next 30 days</span>
+                        </div>
+                        <div v-if="show30Days" class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
@@ -106,8 +114,11 @@
                     </div>
 
                     <div>
-                        <div class="text-sm text-gray-600 mb-2">Beyond 30 days</div>
-                        <div class="overflow-x-auto">
+                        <div class="text-sm text-gray-600 mb-2 flex items-center gap-2 cursor-pointer" @click="showBeyond30 = !showBeyond30">
+                            <span>{{ showBeyond30 ? '▼' : '▶' }}</span>
+                            <span>Beyond 30 days</span>
+                        </div>
+                        <div v-if="showBeyond30" class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
@@ -139,51 +150,15 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Missed Tables -->
-            <div>
-                <h3 class="text-base font-semibold mb-2">Missed</h3>
-                <div class="space-y-3">
-                    <div v-for="group in missedGroups" :key="group.title">
-                        <div class="text-sm font-medium mb-2">{{ group.title }}</div>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Title</th>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Due</th>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Recurrence</th>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Life Area</th>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Completed</th>
-                                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-500">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-100">
-                                    <tr v-for="t in group.items" :key="t.id">
-                                        <td class="px-3 py-1 text-sm">{{ t.text }}</td>
-                                        <td class="px-3 py-1 text-sm">{{ parseNextDue(t) ? parseNextDue(t).format('YYYY-MM-DD') : '-' }}</td>
-                                        <td class="px-3 py-1 text-sm">{{ getRecurrence(t) }}</td>
-                                        <td class="px-3 py-1 text-sm">{{ getLifeArea(t.tags) }}</td>
-                                        <td class="px-3 py-1 text-sm">{{ t.completed ? 'Yes' : 'No' }}</td>
-                                        <td class="px-3 py-1 text-sm">
-                                            <button v-if="!t.completed" @click="markDone(t.id)" class="text-sm text-indigo-600">Mark</button>
-                                        </td>
-                                    </tr>
-                                    <tr v-if="!group.items.length">
-                                        <td class="px-3 py-1 text-sm text-gray-500" colspan="6">No items.</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         <div v-else>
             <!-- Today -->
             <section v-if="!showMissed" class="mb-2">
-                <h3 class="text-base font-semibold mb-2">Today</h3>
-                <div class="space-y-2">
+                <h3 class="text-base font-semibold mb-2 flex items-center gap-2 cursor-pointer" @click="showToday = !showToday">
+                    <span>{{ showToday ? '▼' : '▶' }}</span>
+                    <span>Today</span>
+                </h3>
+                <div v-if="showToday" class="space-y-2">
                     <TaskCard
                         v-for="t in today"
                         :key="t.id"
@@ -204,11 +179,13 @@
 
             <!-- Upcoming -->
             <section v-if="!showMissed" class="my-4">
-                <!-- <h3 class="text-base font-semibold mb-2">Upcoming</h3> -->
                 <div class="space-y-3">
                     <div v-if="upcoming7.length">
-                        <div class="text-sm text-gray-600 mb-2">Next 7 days</div>
-                        <div class="space-y-2">
+                        <div class="text-sm text-gray-600 mb-2 flex items-center gap-2 cursor-pointer" @click="show7Days = !show7Days">
+                            <span>{{ show7Days ? '▼' : '▶' }}</span>
+                            <span>Next 7 days</span>
+                        </div>
+                        <div v-if="show7Days" class="space-y-2">
                             <TaskCard
                                 v-for="t in upcoming7"
                                 :key="t.id"
@@ -226,8 +203,11 @@
                         </div>
                     </div>
                     <div v-if="upcoming30.length">
-                        <div class="text-sm text-gray-600 mb-2">Next 30 days</div>
-                        <div class="space-y-2">
+                        <div class="text-sm text-gray-600 mb-2 flex items-center gap-2 cursor-pointer" @click="show30Days = !show30Days">
+                            <span>{{ show30Days ? '▼' : '▶' }}</span>
+                            <span>Next 30 days</span>
+                        </div>
+                        <div v-if="show30Days" class="space-y-2">
                             <TaskCard
                                 v-for="t in upcoming30"
                                 :key="t.id"
@@ -245,8 +225,11 @@
                         </div>
                     </div>
                     <div v-if="upcomingBeyond.length">
-                        <div class="text-sm text-gray-600 mb-2">Beyond 30 days</div>
-                        <div class="space-y-2">
+                        <div class="text-sm text-gray-600 mb-2 flex items-center gap-2 cursor-pointer" @click="showBeyond30 = !showBeyond30">
+                            <span>{{ showBeyond30 ? '▼' : '▶' }}</span>
+                            <span>Beyond 30 days</span>
+                        </div>
+                        <div v-if="showBeyond30" class="space-y-2">
                             <TaskCard
                                 v-for="t in upcomingBeyond"
                                 :key="t.id"
@@ -261,31 +244,6 @@
                                 :showNotes="true"
                                 @toggleNotes="toggleNotes"
                             />
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Missed -->
-            <section>
-                <h3 v-if="!showMissed" class="text-base font-semibold mb-2">Missed</h3>
-                <div class="grid gap-3">
-                    <div v-for="group in missedGroups" :key="group.title">
-                        <div class="text-sm font-medium mb-2">{{ group.title }}</div>
-                        <div class="space-y-2">
-                            <TaskCard
-                                v-for="t in group.items"
-                                :key="t.id"
-                                :task="t"
-                                :onMark="markDone"
-                                :showMark="true"
-                                :getLifeArea="getLifeArea"
-                                :getTagNames="store.getTagNames"
-                                :getRecurrence="getRecurrence"
-                                :parseNextDue="parseNextDue"
-                                :disabled="store.loading"
-                            />
-                            <div v-if="!group.items.length" class="text-sm text-gray-500">No items.</div>
                         </div>
                     </div>
                 </div>
@@ -323,6 +281,13 @@ export default {
         const showMissed = props.showMissed || false;
         const notesTaskId = ref(null);
         const notesContent = ref('');
+
+        // Section visibility toggles
+        const showToday = ref(true);
+        const showUpcoming = ref(true);
+        const show7Days = ref(true);
+        const show30Days = ref(true);
+        const showBeyond30 = ref(true);
 
         const notesTask = computed(() => {
             if (!notesTaskId.value) return null;
@@ -443,6 +408,11 @@ export default {
             notesContent,
             toggleNotes,
             saveNotes,
+            showToday,
+            showUpcoming,
+            show7Days,
+            show30Days,
+            showBeyond30,
         };
     },
 };
