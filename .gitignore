@@ -3,6 +3,7 @@ node_modules
 
 # Build files (commented out to include in repo)
 # dist
+# docs
 
 # Editor
 .vscode
